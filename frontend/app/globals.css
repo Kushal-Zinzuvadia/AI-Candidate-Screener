@@ -1,23 +1,39 @@
 @import "tailwindcss";
 
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+/* Palette:
+   Deep Espresso Slate  #12100E  — app background
+   Roasted Cocoa        #1C1917  — cards / surfaces
+   Terracotta Clay      #E05A36  — primary accent (buttons, active)
+   Calming Sage         #4ADE80  — success / progress / metrics
+   Parchment White      #F5F5F4  — primary text
+   Warm Pebble          #A8A29E  — muted text / placeholders
+*/
+
+@theme {
+  --color-primary:      #E05A36; /* Terracotta Clay — buttons, active states     */
+  --color-accent:       #4ADE80; /* Calming Sage    — progress, success          */
+  --color-score-strong: #4ADE80; /* sage  — score ≥ 4                            */
+  --color-score-mid:    #CA8A04; /* ochre — score = 3                            */
+  --color-score-weak:   #F87171; /* coral — score ≤ 2                            */
+}
+
+/* ── App-level CSS variables ───────────────────────────────────────────────── */
 :root {
-  --bg-primary: #06060f;
-  --bg-card: rgba(15, 15, 35, 0.8);
-  --border: rgba(139, 92, 246, 0.2);
-  --accent-purple: #8b5cf6;
-  --accent-blue: #3b82f6;
-  --accent-gradient: linear-gradient(135deg, #8b5cf6, #3b82f6);
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --bg-primary:       #12100E;
+  --bg-surface:       #1C1917;
+  --bg-card:          rgba(28, 25, 23, 0.92);
+  --border:           rgba(168, 162, 158, 0.18);   /* warm pebble tint */
+  --border-accent:    rgba(224, 90, 54, 0.35);      /* terracotta tint  */
+  --accent-gradient:  linear-gradient(135deg, #E05A36, #4ADE80);
+  --text-primary:     #F5F5F4;
+  --text-secondary:   #A8A29E;
+  --text-muted:       #78716C;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-primary);
@@ -26,40 +42,38 @@ body {
   min-height: 100vh;
 }
 
-/* Animated grid background */
+/* Subtle texture overlay */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(224, 90, 54, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 90, 54, 0.025) 1px, transparent 1px);
+  background-size: 44px 44px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Glowing orbs */
+/* Warm glowing orb — top-left, terracotta hue */
 body::after {
   content: "";
   position: fixed;
-  top: -20%;
-  left: -10%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(
-    ellipse,
-    rgba(139, 92, 246, 0.08) 0%,
-    transparent 70%
-  );
+  top: -25%;
+  left: -12%;
+  width: 65%;
+  height: 65%;
+  background: radial-gradient(ellipse, rgba(224, 90, 54, 0.06) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
+
+/* ── Components ────────────────────────────────────────────────────────────── */
 
 .glass-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
   border-radius: 16px;
 }
 
@@ -70,13 +84,15 @@ body::after {
   background-clip: text;
 }
 
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+
 .btn-primary {
-  background: var(--accent-gradient);
-  color: white;
+  background: var(--color-primary);       /* Terracotta Clay */
+  color: #12100E;                          /* dark text for contrast */
   border: none;
   border-radius: 10px;
   padding: 12px 28px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 15px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -92,22 +108,12 @@ body::after {
   transition: background 0.2s;
 }
 
-.btn-primary:hover::before {
-  background: rgba(255, 255, 255, 0.08);
-}
+.btn-primary:hover::before  { background: rgba(255, 255, 255, 0.12); }
+.btn-primary:active          { transform: scale(0.98); }
+.btn-primary:disabled        { opacity: 0.45; cursor: not-allowed; }
+.btn-primary:disabled:active { transform: none; }
 
-.btn-primary:active {
-  transform: scale(0.98);
-}
-
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-primary:disabled:active {
-  transform: none;
-}
+/* ── Difficulty badges ─────────────────────────────────────────────────────── */
 
 .difficulty-badge {
   display: inline-flex;
@@ -121,22 +127,24 @@ body::after {
 }
 
 .difficulty-easy {
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--color-score-strong);
+  border: 1px solid rgba(74, 222, 128, 0.28);
 }
 
 .difficulty-medium {
-  background: rgba(234, 179, 8, 0.15);
-  color: #facc15;
-  border: 1px solid rgba(234, 179, 8, 0.3);
+  background: rgba(202, 138, 4, 0.12);
+  color: var(--color-score-mid);
+  border: 1px solid rgba(202, 138, 4, 0.28);
 }
 
 .difficulty-hard {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--color-score-weak);
+  border: 1px solid rgba(248, 113, 113, 0.28);
 }
+
+/* ── Score rings ───────────────────────────────────────────────────────────── */
 
 .score-ring {
   display: flex;
@@ -147,62 +155,60 @@ body::after {
   border-radius: 50%;
   font-size: 18px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .score-high {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
-  border: 2px solid rgba(34, 197, 94, 0.4);
+  background: rgba(74, 222, 128, 0.14);
+  color: var(--color-score-strong);
+  border: 2px solid rgba(74, 222, 128, 0.35);
 }
 
 .score-mid {
-  background: rgba(234, 179, 8, 0.2);
-  color: #facc15;
-  border: 2px solid rgba(234, 179, 8, 0.4);
+  background: rgba(202, 138, 4, 0.14);
+  color: var(--color-score-mid);
+  border: 2px solid rgba(202, 138, 4, 0.35);
 }
 
 .score-low {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 2px solid rgba(239, 68, 68, 0.4);
+  background: rgba(248, 113, 113, 0.14);
+  color: var(--color-score-weak);
+  border: 2px solid rgba(248, 113, 113, 0.35);
 }
 
-/* Smooth page transitions */
+/* ── Page transitions ──────────────────────────────────────────────────────── */
+
 .page-enter {
   animation: pageIn 0.35s ease;
 }
 
 @keyframes pageIn {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Progress bar */
+/* ── Progress bar — Calming Sage ───────────────────────────────────────────── */
+
 .progress-bar-track {
   height: 4px;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(74, 222, 128, 0.12);
   border-radius: 99px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: var(--accent-gradient);
+  background: var(--color-accent);   /* Calming Sage */
   border-radius: 99px;
   transition: width 0.5s ease;
 }
 
-/* Textarea */
+/* ── Textarea ──────────────────────────────────────────────────────────────── */
+
 .answer-textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(168, 162, 158, 0.2);
   border-radius: 12px;
   padding: 16px;
   color: var(--text-primary);
@@ -210,93 +216,110 @@ body::after {
   line-height: 1.6;
   resize: vertical;
   min-height: 160px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   font-family: inherit;
 }
 
 .answer-textarea:focus {
   outline: none;
-  border-color: rgba(139, 92, 246, 0.5);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+  border-color: rgba(224, 90, 54, 0.5);
+  box-shadow: 0 0 0 3px rgba(224, 90, 54, 0.08);
 }
 
-.answer-textarea::placeholder {
-  color: var(--text-muted);
-}
+.answer-textarea::placeholder { color: var(--text-muted); }
 
-/* Collapsible */
-.collapsible-content {
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
-}
+/* ── Spinner ───────────────────────────────────────────────────────────────── */
 
-.collapsible-content.closed {
-  max-height: 0;
-  opacity: 0;
-}
-
-.collapsible-content.open {
-  max-height: 600px;
-  opacity: 1;
-}
-
-/* Spinner */
 .spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-top-color: white;
+  border: 2px solid rgba(245, 245, 244, 0.2);
+  border-top-color: #F5F5F4;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   display: inline-block;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Drop zone */
+/* ── Drop zone — Roasted Cocoa surface ─────────────────────────────────────── */
+
 .drop-zone {
-  border: 2px dashed rgba(139, 92, 246, 0.3);
+  border: 2px dashed rgba(168, 162, 158, 0.3);
   border-radius: 14px;
   padding: 48px;
   text-align: center;
   transition: all 0.2s ease;
   cursor: pointer;
-  background: rgba(139, 92, 246, 0.03);
+  background: var(--bg-surface);        /* Roasted Cocoa */
 }
 
 .drop-zone:hover,
 .drop-zone.dragging {
-  border-color: rgba(139, 92, 246, 0.6);
-  background: rgba(139, 92, 246, 0.07);
+  border-color: rgba(224, 90, 54, 0.6);   /* Terracotta glow on hover */
+  background: rgba(224, 90, 54, 0.06);
+  box-shadow: 0 0 24px rgba(224, 90, 54, 0.08);
 }
 
-/* Select */
-.styled-select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  border-radius: 10px;
-  padding: 12px 16px;
-  color: var(--text-primary);
-  font-size: 15px;
-  width: 100%;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238b5cf6' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  transition: border-color 0.2s;
+/* ── Timer ─────────────────────────────────────────────────────────────────── */
+
+.timer-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  transition: color 0.3s, background 0.3s, border-color 0.3s;
 }
 
-.styled-select:focus {
-  outline: none;
-  border-color: rgba(139, 92, 246, 0.5);
+.timer-normal {
+  color: var(--text-muted);                      /* Warm Pebble — calm, unobtrusive */
+  background: rgba(168, 162, 158, 0.08);
+  border: 1px solid rgba(168, 162, 158, 0.18);
 }
 
-.styled-select option {
-  background: #1a1a2e;
-  color: white;
+.timer-warning {
+  color: #FDA4AF;                                 /* soft coral-rose < 20% time */
+  background: rgba(253, 164, 175, 0.08);
+  border: 1px solid rgba(253, 164, 175, 0.22);
+}
+
+.timer-expired {
+  color: var(--color-score-weak);
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+/* ── Topic pill ────────────────────────────────────────────────────────────── */
+
+.topic-pill {
+  background: rgba(224, 90, 54, 0.1);
+  border: 1px solid rgba(224, 90, 54, 0.2);
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: #FDBA8C;   /* warm peach derived from terracotta */
+}
+
+/* ── Skill badge variants (report page) ────────────────────────────────────── */
+
+.badge-leadership {
+  background: rgba(202, 138, 4, 0.12);
+  border: 1px solid rgba(202, 138, 4, 0.25);
+  color: #FCD34D;   /* dusty ochre */
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 12px;
+}
+
+.badge-technical {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  color: #38BDF8;   /* calm slate-blue */
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 12px;
 }

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 from pydantic import BaseModel
 
 
@@ -79,7 +79,7 @@ class TranscriptItem(BaseModel):
 class SummaryResponse(BaseModel):
     session_id: int
     overall_score: float
-    strengths: list[str]
-    gaps: list[str]
+    strengths: list[Any]
+    gaps: list[Any]
     summary_text: str
     transcript: list[TranscriptItem]

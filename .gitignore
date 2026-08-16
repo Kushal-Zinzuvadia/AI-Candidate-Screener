@@ -50,3 +50,6 @@ uploads/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Project Docs
+development_plan.md
