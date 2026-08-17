@@ -3,7 +3,7 @@
 # You can leave 'app' blank or specify a preferred name. 
 # Fly will override this during the dashboard creation process.
 app = "candidate-screener-api"
-primary_region = "iad"
+primary_region = "bom"
 
 [build]
   dockerfile = "Dockerfile"
