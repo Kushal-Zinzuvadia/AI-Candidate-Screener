@@ -85,10 +85,6 @@ ChromaDB  SQLite/PostgreSQL
 (vectors) (sessions, Q&A, reports)
 ```
 
-For a detailed architecture diagram, see [`development_plan.md §3`](development_plan.md).
-
----
-
 ## Design Decisions
 
 ### Why Groq as the LLM provider?
