@@ -30,7 +30,7 @@ cp .env.example .env
 **3. Ingest knowledge bases** *(run once before starting the server)*
 ```bash
 python ingestion/ingest.py --role ai_ml
-python ingestion/ingest.py --role backend_engineering
+python ingestion/ingest.py --role data_science
 ```
 
 **4. Start backend**

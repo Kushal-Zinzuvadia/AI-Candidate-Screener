@@ -2,10 +2,15 @@ version: "3.9"
 
 services:
   backend:
-    build: ./backend
+    # Built and pushed from your laptop/CI, not on the VM. See build-and-push.sh.
+    image: kushalzinzuvadia/candidate-screener-backend:latest
     ports:
-      - "8000:8000"
+      # Bound to localhost only, for `ssh -L 8000:localhost:8000` debugging.
+      # Public traffic comes in through Caddy on 443, not directly on 8000.
+      - "127.0.0.1:8000:8000"
     volumes:
+      # Still mounted: `git pull` on the VM updates app code instantly, no
+      # rebuild needed. Only requirements.txt changes require a new image.
       - ./backend:/app
       - chroma_data:/app/chroma_data
       - uploads:/app/uploads
@@ -13,6 +18,19 @@ services:
       - ./backend/.env
     depends_on:
       - db
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
     restart: unless-stopped
 
   db:
@@ -32,3 +50,5 @@ volumes:
   chroma_data:
   uploads:
   pg_data:
+  caddy_data:
+  caddy_config: 

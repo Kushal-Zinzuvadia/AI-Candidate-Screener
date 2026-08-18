@@ -1,0 +1,11 @@
+# Replace with your real domain, e.g. api.yourdomain.com
+#
+# No domain yet? You can use a free sslip.io hostname that encodes your VM's
+# IP right in it — e.g. if your VM's external IP is 34.123.45.67, use:
+#   34-123-45-67.sslip.io
+# It already resolves to that IP with zero DNS setup, and Let's Encrypt
+# (which Caddy uses automatically below) will issue a real cert for it.
+
+api.yourdomain.com {
+    reverse_proxy backend:8000
+}
