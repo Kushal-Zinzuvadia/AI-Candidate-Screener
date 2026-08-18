@@ -6,6 +6,6 @@
 # It already resolves to that IP with zero DNS setup, and Let's Encrypt
 # (which Caddy uses automatically below) will issue a real cert for it.
 
-api.yourdomain.com {
+34-45-53-106.sslip.io {
     reverse_proxy backend:8000
 }
