@@ -1,0 +1,42 @@
+# ── Local virtual environment ──────────────────────────────────────────────────
+# Never needed inside Docker; the image installs deps via pip from requirements.txt
+.venv/
+
+# ── Secrets ────────────────────────────────────────────────────────────────────
+# .env is injected at runtime (Fly secrets / docker-compose env_file / -e flags)
+# Never bake secrets into the image layer
+.env
+
+# ── Runtime-generated data ─────────────────────────────────────────────────────
+# These directories are created and written to by the running application.
+# They MUST be mounted as Docker volumes, not baked into the image.
+#   chroma_data/  ← ChromaDB vector index (persistent across restarts via volume)
+#   uploads/      ← candidate PDF resumes uploaded at runtime
+#   screening.db  ← SQLite database
+chroma_data/
+uploads/
+screening.db
+
+# ── Python bytecode & caches ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
+# ── Tests ──────────────────────────────────────────────────────────────────────
+# Test files add no value to a production image
+tests/
+
+# ── Dev tooling & IDE files ────────────────────────────────────────────────────
+.git/
+.gitignore
+*.md
+.DS_Store
+
+# ── NOT ignored (intentionally kept) ──────────────────────────────────────────
+# app/           ← FastAPI application source code
+# ingestion/     ← ingestion scripts + kb_sources PDFs
+#                  (needed to run: python -m ingestion.ingest inside the container)
+# requirements.txt
+# fly.toml       ← used by fly deploy, harmless in image
