@@ -60,7 +60,7 @@ docker compose up --build
 
 # 3. Run ingestion (from inside the backend container)
 docker compose exec backend python ingestion/ingest.py --role ai_ml
-docker compose exec backend python ingestion/ingest.py --role backend_engineering
+docker compose exec backend python ingestion/ingest.py --role data_science
 ```
 
 ---
