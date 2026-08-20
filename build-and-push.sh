@@ -5,7 +5,7 @@
 set -euo pipefail
 
 DOCKERHUB_USERNAME="kushalzinzuvadia"   # <-- change this
-IMAGE_NAME="candidate-screener-backend"
+IMAGE_NAME="ai-candidate-screener-backend"
 TAG="latest"
 
 docker login   # only needed once per machine

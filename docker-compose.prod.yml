@@ -3,7 +3,8 @@ version: "3.9"
 services:
   backend:
     # Built and pushed from your laptop/CI, not on the VM. See build-and-push.sh.
-    image: kushalzinzuvadia/candidate-screener-backend:latest
+    image: kushalzinzuvadia/ai-candidate-screener-backend:latest
+
     ports:
       # Bound to localhost only, for `ssh -L 8000:localhost:8000` debugging.
       # Public traffic comes in through Caddy on 443, not directly on 8000.
